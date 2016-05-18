@@ -8,9 +8,8 @@ class Encoder
   def encode(input_file, output_file, data)
     data = Base64.encode64(data)
     data_lsb = data.unpack("B*").first
-    input_file_lsb = get_input_file_bytes(input_file)
-    check_output_file_exists(output_file)
 
+    input_file_lsb = get_input_file_bytes(input_file)
     replace_lsb(input_file_lsb, data_lsb)
     write_output_file(input_file_lsb, output_file)
 
@@ -54,23 +53,6 @@ class Encoder
     else
       puts "Error: #{input_file} does not exist!"
       exit
-    end
-  end
-
-  # Checks whether the specified output file exists. The user is prompted to
-  # type "yes" to overwrite the file if it exists, while any other input aborts
-  # the program.
-  def check_output_file_exists(output_file)
-    if File.exist?(output_file)
-      puts "File #{output_file} already exists!"
-      puts "Type 'yes' to overwrite #{output_file} and continue:"
-
-      if $stdin.gets.chomp == "yes"
-        return
-      else
-        puts "Aborted by user"
-        exit
-      end
     end
   end
 end
