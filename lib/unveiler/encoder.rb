@@ -38,6 +38,7 @@ class Encoder
       count += 1
       break if count == data.length
     end
+    return bytes
   end
 
   # Reads the input file and returns an array of bytes. If the file does not
