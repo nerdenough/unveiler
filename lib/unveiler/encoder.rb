@@ -9,7 +9,7 @@ class Encoder
     data = Base64.encode64(data)
     data = data.unpack("B*").first
 
-    bytes = get_input_file_bytes(input_file)
+    bytes = Unveiler.get_file_bytes(input_file)
     replace_bytes(bytes, data)
     write_output_file(bytes, output_file)
 
@@ -39,19 +39,5 @@ class Encoder
       break if count == data.length
     end
     return bytes
-  end
-
-  # Reads the input file and returns an array of bytes. If the file does not
-  # exist, an error is printed to the terminal and the program terminates.
-  def get_input_file_bytes(input_file)
-    if File.exist?(input_file)
-      File.open(input_file, "rb") do |file|
-        bytes = file.read.unpack("B*")
-        return bytes[0].scan(/.{8}/)
-      end
-    else
-      puts "Error: #{input_file} does not exist!"
-      exit
-    end
   end
 end
