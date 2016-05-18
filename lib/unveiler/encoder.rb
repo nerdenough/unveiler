@@ -1,7 +1,12 @@
+require "base64"
+
+# Encoder holds methods used for encoding the given data into a specified
+# image.
 class Encoder
   # Encodes the specified data into the input file, saving the encode to the
   # specified output file location.
   def encode(input_file, output_file, data)
+    data = Base64.encode64(data)
     data_lsb = data.unpack("B*").first
     input_file_lsb = get_input_file_bytes(input_file)
     check_output_file_exists(output_file)
