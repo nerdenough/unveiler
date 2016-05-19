@@ -11,20 +11,9 @@ class Encoder
 
     bytes = Unveiler.get_file_bytes(input_file)
     replace_bytes(bytes, data)
-    write_output_file(bytes, output_file)
+    Unveiler.write_file(bytes, output_file)
 
     puts "Successfully encoded #{output_file}!"
-  end
-
-  # Writes the specified bytes to the output file by first converting the binary
-  # to UTF-8 encoding.
-  def write_output_file(bytes, output_file)
-    puts "Writing #{output_file}"
-
-    bytes.map!{|byte| byte = byte.to_i(2)}
-    bytes = bytes.pack("C*").force_encoding('utf-8')
-
-    File.open(output_file, 'w'){|file| file.write(bytes)}
   end
 
   # Loops through the specified bytes array, replacing the least significant

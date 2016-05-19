@@ -19,4 +19,15 @@ class Unveiler
       exit
     end
   end
+
+  # Writes the specified bytes to the output file by first converting the binary
+  # to UTF-8 encoding.
+  def self.write_file(bytes, file_name)
+    puts "Writing #{file_name}"
+
+    bytes.map!{|byte| byte = byte.to_i(2)}
+    bytes = bytes.pack("C*").force_encoding('utf-8')
+
+    File.open(file_name, 'w'){|file| file.write(bytes)}
+  end
 end
