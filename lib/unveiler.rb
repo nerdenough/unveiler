@@ -30,7 +30,7 @@ class Unveiler
     data = Base64.encode64(data)
     data += "EOF"
     data = data.unpack("B*").first
-    
+
     # Encode the data into the array of bytes
     bytes = manipulate_bytes(bytes, data)
 
@@ -38,7 +38,7 @@ class Unveiler
     bytes.map!{|byte| byte = byte.to_i(2)}
     return bytes.pack("C*").force_encoding("utf-8")
   end
-  
+
   # Decodes any data within the specified target data. Upon success, the decoded
   # string will be returned. If an error is thrown while processing the data,
   # nil will be returned.
@@ -48,7 +48,7 @@ class Unveiler
     begin
       # Convert the target data into an array of bytes
       bytes = target.unpack("B*")[0].scan(/.{8}/)
-      
+
       # Obtain string from the bytes
       bytes = process_bytes(bytes)
       return Base64.decode64(bytes)
@@ -56,7 +56,7 @@ class Unveiler
       return nil
     end
   end
-  
+
   # Manipulates an array of bytes by looping through and replacing the least
   # significant bit of each byte with the next sequential bit in a string of
   # binary data. The loop will break when the end of the data string is
@@ -73,12 +73,12 @@ class Unveiler
     end
     return bytes
   end
-  
+
   # Processes the specified array of bytes by looping through each byte and
   # appending the least significant bit onto a string of bits. At the end of
   # every eighth bit, a check will be made to see if the last 3 bytes of the
   # string contain the phrase "EOF". Only the bytes before EOF will be returned
-  # if the phrase is found. An error will be raised if no EOF is found. 
+  # if the phrase is found. An error will be raised if no EOF is found.
   #
   # +bytes+:: Array of bytes to be processed
   def process_bytes(bytes)
@@ -91,13 +91,13 @@ class Unveiler
       if bits.length % 8 == 0
         # Convert bits to array of bytes
         data = bits.scan(/.{8}/)
-        
+
         if data.length >= 3
           # Convert bytes to a UTF-8 string
           data.map!{|byte| byte = byte.to_i(2)}
           data = data.pack("C*").force_encoding("utf-8")
           len = data.length
-          
+
           if data[-3,3] == "EOF"
             # Return the UTF-8 string, excluding "EOF"
             return data[0..len - 3]
