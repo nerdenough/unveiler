@@ -1,26 +1,65 @@
 #!/usr/bin/env ruby
 require 'unveiler'
 
+# Encodes the input file with the specified data, saving the manipulated data
+# to the output file.
+def encode(input, output, data)
+  target = ""
+  begin
+    File.open(input, "rb"){|file| target = file.read}
+  rescue
+    puts "There was an error reading #{input}"
+  end
+
+  unveiler = Unveiler.new
+  data = unveiler.encode(target, data)
+
+  begin
+    File.open(output, "wb"){|file| file.write(data)}
+  rescue
+    puts "There was an error writing to #{output}"
+  end
+end
+
+# Decodes the input file and saves the decoded data in the output file.
+def decode(input, output)
+  target = ""
+  begin
+    File.open(input, "rb"){|file| target = file.read}
+  rescue
+    puts "There was an error reading #{input}"
+  end
+
+  unveiler = Unveiler.new
+  data = unveiler.decode(target) + "\n"
+
+  begin
+    File.open(output, "wb"){|file| file.write(data)}
+  rescue
+    puts "There was an error writing to #{output}"
+  end
+end
+
+# Prints unveiler usage examples.
+def usage
+  puts "Usage:"
+  puts "unveiler encode [input_file] [output_file] [data]"
+  puts "unveiler decode [input_file] [output_file]"
+end
+
+# Verify the correct arguments have been specified
 if ARGV.empty?
-  puts "Unveiler: Expected 'unveiler encode [input_file] [output_file] [data]'"
-  exit
+  usage
 elsif ARGV.first == "encode"
-  if ARGV.length == 4
-    input_file = ARGV[1]
-    output_file = ARGV[2]
-    data = ARGV[3]
-    Unveiler.encode(input_file, output_file, data)
+  if ARGV.length == 4 then encode(ARGV[1], ARGV[2], ARGV[3])
   else
-    puts "Unveiler: Expected 'unveiler encode [input_file] [output_file] [data]'"
+    puts "Usage: 'unveiler encode [input_file] [output_file] [data]'"
   end
 elsif ARGV.first == "decode"
-  if ARGV.length == 3
-    input_file = ARGV[1]
-    output_file = ARGV[2]
-    Unveiler.decode(input_file, output_file)
+  if ARGV.length == 3 then decode(ARGV[1], ARGV[2])
   else
-    puts "Unveiler: Expected 'unveiler decode [input_file] [output_file]'"
+    usage
   end
 else
-  puts "Unveiler: Invalid command #{ARGV.first}"
+  usage
 end
