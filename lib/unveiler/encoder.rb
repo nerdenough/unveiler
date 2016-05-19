@@ -7,11 +7,12 @@ class Encoder
   # specified output file location.
   def encode(input_file, output_file, data)
     data = Base64.encode64(data)
+    data += "EOF"
     data = data.unpack("B*").first
 
     bytes = Unveiler.get_file_bytes(input_file)
     replace_bytes(bytes, data)
-    Unveiler.write_file(bytes, output_file)
+    Unveiler.write_bytes(bytes, output_file)
 
     puts "Successfully encoded #{output_file}!"
   end

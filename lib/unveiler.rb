@@ -1,9 +1,15 @@
 require_relative "unveiler/encoder"
+require_relative "unveiler/decoder"
 
 class Unveiler
   def self.encode(input_file, output_file, data)
     encoder = Encoder.new
     encoder.encode(input_file, output_file, data)
+  end
+
+  def self.decode(input_file, output_file)
+    decoder = Decoder.new
+    decoder.decode(input_file, output_file)
   end
 
   # Reads the input file and returns an array of bytes. If the file does not
@@ -22,12 +28,17 @@ class Unveiler
 
   # Writes the specified bytes to the output file by first converting the binary
   # to UTF-8 encoding.
-  def self.write_file(bytes, file_name)
+  def self.write_bytes(bytes, file_name)
     puts "Writing #{file_name}"
 
     bytes.map!{|byte| byte = byte.to_i(2)}
-    bytes = bytes.pack("C*").force_encoding('utf-8')
+    bytes = bytes.pack("C*").force_encoding("utf-8")
 
-    File.open(file_name, 'w'){|file| file.write(bytes)}
+    File.open(file_name, "w"){|file| file.write(bytes)}
+  end
+
+  def self.write_file(data, file_name)
+    puts "Writing #{file_name}"
+    File.open(file_name, "w"){|file| file.write(data)}
   end
 end

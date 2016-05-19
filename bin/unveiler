@@ -13,6 +13,14 @@ elsif ARGV.first == "encode"
   else
     puts "Unveiler: Expected 'unveiler encode [input_file] [output_file] [data]'"
   end
+elsif ARGV.first == "decode"
+  if ARGV.length == 3
+    input_file = ARGV[1]
+    output_file = ARGV[2]
+    Unveiler.decode(input_file, output_file)
+  else
+    puts "Unveiler: Expected 'unveiler decode [input_file] [output_file]'"
+  end
 else
   puts "Unveiler: Invalid command #{ARGV.first}"
 end

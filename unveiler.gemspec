@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Brendan Goodenough"]
   spec.email = "brendan@goodenough.nz"
   spec.homepage = "https://github.com/nerdenough/unveiler"
-  spec.files = ["lib/unveiler.rb", "lib/unveiler/encoder.rb"]
+  spec.files = ["lib/unveiler.rb", "lib/unveiler/encoder.rb", "lib/unveiler/decoder.rb"]
   spec.executables << "unveiler"
   spec.license = "MIT"
 end
