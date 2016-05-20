@@ -4,58 +4,53 @@ require 'unveiler'
 # Encodes the input file with the specified data, saving the manipulated data
 # to the output file.
 def encode(input, output, data)
-  target = ""
   begin
-    File.open(input, "rb"){|file| target = file.read}
+    target = read_file(input)
+    data = Unveiler.encode(target, data)
+    write_file(output, data)
   rescue
-    puts "There was an error reading #{input}"
-  end
-
-  unveiler = Unveiler.new
-  data = unveiler.encode(target, data)
-
-  begin
-    File.open(output, "wb"){|file| file.write(data)}
-  rescue
-    puts "There was an error writing to #{output}"
+    puts $!
   end
 end
 
-# Decodes the input file and saves the decoded data in the output file.
+# Decodes the provided input file and saves the decoded data to the output
+# file.
 def decode(input, output)
-  target = ""
   begin
-    File.open(input, "rb"){|file| target = file.read}
+    target = read_file(input)
+    data = Unveiler.decode(target)
+    write_file(output, data + "\n")
   rescue
-    puts "There was an error reading #{input}"
+    puts $!.message
   end
+end
 
-  unveiler = Unveiler.new
-  data = unveiler.decode(target) + "\n"
+# Reads data from the specified file.
+def read_file(input)
+  File.open(input, 'rb'){|file| return file.read}
+end
 
-  begin
-    File.open(output, "wb"){|file| file.write(data)}
-  rescue
-    puts "There was an error writing to #{output}"
-  end
+# Writes data to the specified file.
+def write_file(output, data)
+  File.open(output, 'wb'){|file| file.write(data)}
 end
 
 # Prints unveiler usage examples.
 def usage
-  puts "Usage:"
-  puts "unveiler encode [input_file] [output_file] [data]"
-  puts "unveiler decode [input_file] [output_file]"
+  puts 'Usage:'
+  puts 'unveiler encode [input_file] [output_file] [data]'
+  puts 'unveiler decode [input_file] [output_file]'
 end
 
 # Verify the correct arguments have been specified
 if ARGV.empty?
   usage
-elsif ARGV.first == "encode"
+elsif ARGV.first == 'encode'
   if ARGV.length == 4 then encode(ARGV[1], ARGV[2], ARGV[3])
   else
-    puts "Usage: 'unveiler encode [input_file] [output_file] [data]'"
+    usage
   end
-elsif ARGV.first == "decode"
+elsif ARGV.first == 'decode'
   if ARGV.length == 3 then decode(ARGV[1], ARGV[2])
   else
     usage
