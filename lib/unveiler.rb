@@ -40,21 +40,16 @@ class Unveiler
   end
 
   # Decodes any data within the specified target data. Upon success, the decoded
-  # string will be returned. If an error is thrown while processing the data,
-  # nil will be returned.
+  # string will be returned.
   #
   # +target+::  Target data to be decoded
   def decode(target)
-    begin
-      # Convert the target data into an array of bytes
-      bytes = target.unpack("B*")[0].scan(/.{8}/)
+    # Convert the target data into an array of bytes
+    bytes = target.unpack("B*")[0].scan(/.{8}/)
 
-      # Obtain string from the bytes
-      bytes = process_bytes(bytes)
-      return Base64.decode64(bytes)
-    rescue
-      return nil
-    end
+    # Obtain string from the bytes
+    bytes = process_bytes(bytes)
+    return Base64.decode64(bytes)
   end
 
   # Manipulates an array of bytes by looping through and replacing the least
