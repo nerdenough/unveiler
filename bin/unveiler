@@ -3,6 +3,10 @@ require 'unveiler'
 
 # Encodes the input file with the specified data, saving the manipulated data
 # to the output file.
+#
+# +input+::  File to be encoded
+# +output+:: File to write encoded data to
+# +data+::   Data to be encoded
 def encode(input, output, data)
   begin
     target = read_file(input)
@@ -15,6 +19,9 @@ end
 
 # Decodes the provided input file and saves the decoded data to the output
 # file.
+#
+# +input+::  File to be decoded
+# +output+:: File to write decoded data to
 def decode(input, output)
   begin
     target = read_file(input)
@@ -26,11 +33,15 @@ def decode(input, output)
 end
 
 # Reads data from the specified file.
+#
+# +input+:: File to read
 def read_file(input)
   File.open(input, 'rb'){|file| return file.read}
 end
 
 # Writes data to the specified file.
+#
+# +output+:: File to write
 def write_file(output, data)
   File.open(output, 'wb'){|file| file.write(data)}
 end
@@ -42,19 +53,15 @@ def usage
   puts 'unveiler decode [input_file] [output_file]'
 end
 
-# Verify the correct arguments have been specified
-if ARGV.empty?
-  usage
-elsif ARGV.first == 'encode'
-  if ARGV.length == 4 then encode(ARGV[1], ARGV[2], ARGV[3])
+# Parses ARGV to ensure the correct parameters are given.
+def parse_argv
+  if ARGV.first == 'encode'
+    ARGV.length == 4 ? encode(ARGV[1], ARGV[2], ARGV[3]) : usage
+  elsif ARGV.first == 'decode'
+    ARGV.length == 3 ? decode(ARGV[1], ARGV[2]) : usage
   else
     usage
   end
-elsif ARGV.first == 'decode'
-  if ARGV.length == 3 then decode(ARGV[1], ARGV[2])
-  else
-    usage
-  end
-else
-  usage
 end
+
+ARGV.empty? ? usage : parse_argv
