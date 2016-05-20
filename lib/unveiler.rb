@@ -61,18 +61,14 @@ class Unveiler
   # +data+::  Binary data to insert
   def self.manipulate_bytes(bytes, data)
     count = 0
-    bit = 7
 
-    while bit >= 0
+    7.times do |index|
       # Loop through each byte and replace the bit at the given index
       bytes.reverse.each do |byte|
-        byte[bit] = data[count]
+        byte[7 - index] = data[count]
         count += 1
         return bytes if count == data.length
       end
-
-      # Decrease the index of the bit to manipulate
-      bit -= 1
     end
 
     # Ran out of space to encode data
@@ -88,12 +84,11 @@ class Unveiler
   # +bytes+:: Array of bytes to be processed
   def self.process_bytes(bytes)
     bits = ''
-    index = 7
 
-    while index >= 0
+    7.times do |index|
       bytes.reverse.each do |byte|
         # Least significant bit
-        bits += byte[index]
+        bits += byte[7 - index]
 
         # Check whether a full byte has been read
         if bits.length % 8 == 0
@@ -113,8 +108,6 @@ class Unveiler
           end
         end
       end
-
-      index -= 1
     end
 
     # No EOF was found, error
