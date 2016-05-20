@@ -62,7 +62,7 @@ class Unveiler
   def self.manipulate_bytes(bytes, data)
     count = 0
 
-    7.times do |index|
+    8.times do |index|
       # Loop through each byte and replace the bit at the given index
       bytes.reverse.each do |byte|
         byte[7 - index] = data[count]
@@ -85,7 +85,7 @@ class Unveiler
   def self.process_bytes(bytes)
     bits = ''
 
-    7.times do |index|
+    8.times do |index|
       bytes.reverse.each do |byte|
         # Least significant bit
         bits += byte[7 - index]
