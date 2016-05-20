@@ -79,7 +79,7 @@ RSpec.describe Unveiler, "#manipulate_bytes" do
       data = "000000"
 
       array = ["11111111", "11111111", "11111111", "11111111"]
-      answer = ["11111110", "11111110", "11111110", "11111110"]
+      answer = ["11111110", "11111110", "11111100", "11111100"]
       result = unveiler.manipulate_bytes(array, data)
 
       expect(result.length).to eq 4
@@ -101,7 +101,7 @@ RSpec.describe Unveiler, "#manipulate_bytes" do
       data = "100101"
 
       array = ["10001000", "10101011", "11111111", "11111110"]
-      answer = ["10001001", "10101010", "11111110", "11111111"]
+      answer = ["10001001", "10101010", "11111110", "11111101"]
       result = unveiler.manipulate_bytes(array, data)
 
       expect(result.length).to eq 4

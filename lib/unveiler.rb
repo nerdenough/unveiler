@@ -61,10 +61,18 @@ class Unveiler
   # +data+::  Binary data to insert
   def manipulate_bytes(bytes, data)
     count = 0
-    bytes.reverse.each do |byte|
-      byte[7] = data[count]
-      count += 1
-      break if count == data.length
+    bit = 7
+
+    while bit >= 0
+      # Loop through each byte and replace the bit at the given index
+      bytes.reverse.each do |byte|
+        byte[bit] = data[count]
+        count += 1
+        return bytes if count == data.length
+      end
+
+      # Decrease the index of the bit to manipulate
+      bit -= 1
     end
     return bytes
   end
@@ -78,27 +86,33 @@ class Unveiler
   # +bytes+:: Array of bytes to be processed
   def process_bytes(bytes)
     bits = ""
-    bytes.reverse.each do |byte|
-      # Least significant bit
-      bits += byte[7]
+    index = 7
 
-      # Check whether a full byte has been read
-      if bits.length % 8 == 0
-        # Convert bits to array of bytes
-        data = bits.scan(/.{8}/)
+    while index >= 0
+      bytes.reverse.each do |byte|
+        # Least significant bit
+        bits += byte[index]
 
-        if data.length >= 3
-          # Convert bytes to a UTF-8 string
-          data.map!{|byte| byte = byte.to_i(2)}
-          data = data.pack("C*").force_encoding("utf-8")
-          len = data.length
+        # Check whether a full byte has been read
+        if bits.length % 8 == 0
+          # Convert bits to array of bytes
+          data = bits.scan(/.{8}/)
 
-          if data[-3,3] == "EOF"
-            # Return the UTF-8 string, excluding "EOF"
-            return data[0..len - 3]
+          if data.length >= 3
+            # Convert bytes to a UTF-8 string
+            data.map!{|byte| byte = byte.to_i(2)}
+            data = data.pack("C*").force_encoding("utf-8")
+            len = data.length
+
+            if data[-3,3] == "EOF"
+              # Return the UTF-8 string, excluding "EOF"
+              return data[0..len - 3]
+            end
           end
         end
       end
+
+      index -= 1
     end
 
     # No EOF was found, error
