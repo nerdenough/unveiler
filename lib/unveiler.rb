@@ -100,7 +100,7 @@ class Unveiler
 
           if data.length >= 3
             # Convert bytes to a UTF-8 string
-            data.map!{|byte| byte = byte.to_i(2)}
+            data.map!{|b| byte = b.to_i(2)}
             data = data.pack('C*').force_encoding('utf-8')
             len = data.length
 
