@@ -29,12 +29,17 @@ RSpec.describe Unveiler do
 
     context 'when the data is larger than the target' do
       it 'should raise an error' do
-        begin
-          Unveiler.encode(@data, @target)
-          fail
-        rescue
-          # Should have failed
-        end
+        expect{Unveiler.encode(@data, @target)}.to raise_error(RuntimeError)
+      end
+    end
+
+    context 'when the wrong arguments are passed' do
+      it 'should raise an ArgumentError if the target is not a String' do
+        expect{Unveiler.encode(true, @data)}.to raise_error(ArgumentError)
+      end
+
+      it 'should raise an ArgumentError if the data is not a String' do
+        expect{Unveiler.encode(@target, [1, 2])}.to raise_error(ArgumentError)
       end
     end
   end

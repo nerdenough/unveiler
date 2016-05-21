@@ -23,6 +23,9 @@ class Unveiler
   # +target+::  Target data to be manipulated
   # +data+::    Data to encode
   def self.encode(target, data)
+    raise ArgumentError, 'target must be a string' unless target.is_a? String
+    raise ArgumentError, 'data must be a string' unless data.is_a? String
+
     # Convert target data into an array of bytes
     bytes = target.unpack('B*')[0].scan(/.{8}/)
 
