@@ -9,14 +9,11 @@ require 'unveiler'
 # +type+::   Specifies whether the data is a file name or a string
 # +value+::  File name or string data
 def encode(input, output, type, value)
-  data = ''
-  if type == 'string'
-    data = value
-  elsif type == 'file'
-    data = read_file(value)
-  else
-    raise ArgumentError, 'Expecting string of data or file name for type/value'
-  end
+  puts 'Starting encoding! This may take some time...'
+  start_time = Time.now
+
+  data = value if type == 'string'
+  data = read_file(value) if type == 'file'
 
   begin
     target = read_file(input)
@@ -25,6 +22,9 @@ def encode(input, output, type, value)
   rescue
     puts $!.message
   end
+
+  time_elapsed = (Time.now - start_time).round(3)
+  puts "Encoding completed in #{time_elapsed} seconds!"
 end
 
 # Decodes the provided input file and saves the decoded data to the output
@@ -33,6 +33,9 @@ end
 # +input+::  File to be decoded
 # +output+:: File to write decoded data to
 def decode(input, output)
+  puts 'Starting decoding! This may take some time...'
+  start_time = Time.now
+
   begin
     target = read_file(input)
     data = Unveiler.decode(target)
@@ -40,6 +43,9 @@ def decode(input, output)
   rescue
     puts $!.message
   end
+
+  time_elapsed = (Time.now - start_time).round(3)
+  puts "Decoding completed in #{time_elapsed} seconds!"
 end
 
 # Reads data from the specified file.
