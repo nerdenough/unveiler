@@ -6,14 +6,24 @@ require 'unveiler'
 #
 # +input+::  File to be encoded
 # +output+:: File to write encoded data to
-# +data+::   Data to be encoded
-def encode(input, output, data)
+# +type+::   Specifies whether the data is a file name or a string
+# +value+::  File name or string data
+def encode(input, output, type, value)
+  data = ''
+  if type == 'string'
+    data = value
+  elsif type == 'file'
+    data = read_file(value)
+  else
+    raise ArgumentError, 'Expecting string of data or file name for type/value'
+  end
+
   begin
     target = read_file(input)
     data = Unveiler.encode(target, data)
     write_file(output, data)
   rescue
-    puts $!
+    puts $!.message
   end
 end
 
@@ -51,16 +61,46 @@ def usage
   puts 'Usage:'
   puts 'unveiler encode [input_file] [output_file] [data]'
   puts 'unveiler decode [input_file] [output_file]'
+  exit
 end
 
 # Parses ARGV to ensure the correct parameters are given.
 def parse_argv
-  if ARGV.first == 'encode'
-    ARGV.length == 4 ? encode(ARGV[1], ARGV[2], ARGV[3]) : usage
-  elsif ARGV.first == 'decode'
-    ARGV.length == 3 ? decode(ARGV[1], ARGV[2]) : usage
-  else
+  command = ''
+  data_type = ''
+  data_value = ''
+  input_file = ''
+  output_file = ''
+
+  begin
+    ARGV.length.times do |i|
+      if ARGV[i] == '-e' || ARGV[i] == '--encode'
+        command = 'encode'
+      elsif ARGV[i] == '-d' || ARGV[i] == '--decode'
+        command = 'decode'
+      elsif ARGV[i] == '-i' || ARGV[i] == '--input'
+        input_file = ARGV[i + 1]
+      elsif ARGV[i] == '-o' || ARGV[i] == '--output'
+        output_file = ARGV[i + 1]
+      elsif ARGV[i] == '-s' || ARGV[i] == '--string'
+        data_type = 'string'
+        data_value = ARGV[i + 1]
+      elsif ARGV[i] == '-f' || ARGV[i] == '--file'
+        data_type = 'file'
+        data_value = ARGV[i + 1]
+      end
+    end
+  rescue
     usage
+  end
+
+  usage if command == '' || input_file == '' || output_file == ''
+  usage if command == 'encode' && (data_type == '' || data_value == '')
+
+  if command == 'encode'
+    encode(input_file, output_file, data_type, data_value)
+  elsif command == 'decode'
+    decode(input_file, output_file)
   end
 end
 

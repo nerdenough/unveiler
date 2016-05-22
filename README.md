@@ -1,5 +1,6 @@
 #Unveiler
 [![Build Status](https://travis-ci.org/nerdenough/unveiler.svg?branch=master)](https://travis-ci.org/nerdenough/unveiler)
+[![Gem Version](https://badge.fury.io/rb/unveiler.svg)](https://badge.fury.io/rb/unveiler)
 
 Unveiler is a basic steganography tool for encoding strings within files. It
 works by manipulating the bits of the input file, starting with the least
