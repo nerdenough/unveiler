@@ -64,9 +64,14 @@ end
 
 # Prints unveiler usage examples.
 def usage
-  puts 'Usage:'
-  puts 'unveiler encode [input_file] [output_file] [data]'
-  puts 'unveiler decode [input_file] [output_file]'
+  puts "Usage Guide:"
+  puts "Short\tLong\t\tDescription"
+  puts "-e\t--encode\tEncodes the specified input file"
+  puts "-d\t--decode\tDecodes the specified input file"
+  puts "-i\t--input\t\tFile to read from"
+  puts "-o\t--output\tFile to write to"
+  puts "-s\t--string\tSpecify a string of data (following, in quotes)"
+  puts "-f\t--file\t\tSpecify a file to load data from"
   exit
 end
 

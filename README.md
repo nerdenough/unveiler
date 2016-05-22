@@ -14,38 +14,38 @@ $ gem install unveiler
 ```
 
 ### Usage
+#### Encode with a file
+The following example will encode the text from helloworld.txt into the input
+file, saving it to the output file.
 ```ruby
-$ unveiler encode [input_file] [output_file] [data_to_encode]
-$ unveiler decode [input_file] [output_file]
+$ unveiler -e -i input -o output -f helloworld.txt
+```
+
+#### Encode with a string
+The following example will encode the string "Hello, world" into the input
+file, saving it to the output file.
+```ruby
+$ unveiler -e -i input -o output -s "Hello, world"
 ```
 
 ## In Depth
-### Encoding a File
-Files can be encoded using Unveiler's `encode` argument by specifying the input
-and output file locations as well as providing the data to encode as a string.
+### Arguments
+Short|Long|Description
+---|---|---
+-e|--encode|Runs the encode operation
+-d|--decode|Runs the decode operation
+-i|--input|Specifies the input file
+-o|--output|Specifies the output file
+-s|--string|Specifies the data as a string
+-f|--file|Specifies the data as a file to read
 
-```
-$ unveiler encode file_to_encode.jpg output.jpg "Hello, world."
-```
+### Encode
+When running the encode method, you must always specify an input file, output
+file and either a string or file to encode.
 
-The above example will insert the string "Hello, world." into
-`file_to_encode.jpg`, saving the encoded file as `output.jpg`.
-
-### Decoding a File
-Files can be decoded using Unveiler's `decode` argument by specifying the input
-and output files. This will attempt to read the bits of the input file to
-determine the encoded message. An error will be raised if an encoded string
-cannot be found.
-
-```
-$ unveiler decode file_to_decode.jpg output_file.txt
-```
-
-The above example will take `file_to_decode.jpg`, decode the embedded string
-and save as `output_file.txt`. If you had previously encoded "Hello, world."
-into `file_to_decode.jpg`, you would expect "Hello, world." to be the contents
-of `output_file.txt`.
-
+### Decode
+When running the decode method, you must always specifiy the input and output
+files.
 
 ## Running Tests
 ```
