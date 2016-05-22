@@ -88,6 +88,7 @@ class Unveiler
   #
   # +bytes+:: Array of bytes to be processed
   def self.process_bytes(bytes)
+    eof = '010001010100111101000110' # binary "EOF"
     bits = ''
 
     8.times do |index|
@@ -96,20 +97,16 @@ class Unveiler
         bits += byte[7 - index]
 
         # Check whether a full byte has been read
-        if bits.length % 8 == 0
-          # Convert bits to array of bytes
-          data = bits.scan(/.{8}/)
+        if bits.length % 8 == 0 && bits.length >= 24
+          if bits[-24..-1] == eof
+            # Convert bits to array of bytes
+            data = bits.scan(/.{8}/)
 
-          if data.length >= 3
             # Convert bytes to a UTF-8 string
             data.map!{|b| byte = b.to_i(2)}
             data = data.pack('C*').force_encoding('utf-8')
-            len = data.length
 
-            if data[-3,3] == 'EOF'
-              # Return the UTF-8 string, excluding 'EOF'
-              return data[0..len - 3]
-            end
+            return data[0..data.length - 3]
           end
         end
       end
