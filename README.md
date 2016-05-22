@@ -17,15 +17,22 @@ $ gem install unveiler
 #### Encode with a file
 The following example will encode the text from helloworld.txt into the input
 file, saving it to the output file.
-```ruby
+```
 $ unveiler -e -i input -o output -f helloworld.txt
 ```
 
 #### Encode with a string
 The following example will encode the string "Hello, world" into the input
 file, saving it to the output file.
-```ruby
+```
 $ unveiler -e -i input -o output -s "Hello, world"
+```
+
+#### Decode
+The following example will decode the input file, writing any decoded string
+into the output file.
+```
+$ unveiler -d -i encoded -o decoded
 ```
 
 ## In Depth
