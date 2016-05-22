@@ -1,7 +1,7 @@
 Gem::Specification.new do |spec|
   spec.name = "unveiler"
-  spec.version = "0.0.0"
-  spec.date = "2016-05-18"
+  spec.version = "0.0.1"
+  spec.date = "2016-05-22"
   spec.summary = "Encode hidden messages in files"
   spec.description = "Unveiler encodes hidden messages within files by manipulating their least significant bits."
   spec.authors = ["Brendan Goodenough"]
