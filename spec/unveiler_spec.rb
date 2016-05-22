@@ -44,6 +44,26 @@ RSpec.describe Unveiler do
     end
   end
 
+  describe '#decode' do
+    before(:example) do
+      @target = 'Hello, world!'
+      @data = 'hi'
+    end
+
+    context 'when an encoded string is passed through' do
+      it 'should return a decoded string' do
+        encoded = Unveiler.encode(@target, @data)
+        expect(Unveiler.decode(encoded)).to eq 'hi'
+      end
+    end
+
+    context 'when the wrong arguments are passed' do
+      it 'should raise an ArgumentError if the target is not a String' do
+        expect{Unveiler.decode(true)}.to raise_error(ArgumentError)
+      end
+    end
+  end
+
   describe '#manipulate_bytes' do
     before(:example) do
       @input_bytes = ['10001000', '10101010', '11111111', '00000000']
@@ -101,6 +121,29 @@ RSpec.describe Unveiler do
       it 'should raise a RuntimeError' do
         data = '111111111111111111111111111111111'
         expect{Unveiler.manipulate_bytes(@input_bytes, data)}.to raise_error(RuntimeError)
+      end
+    end
+  end
+
+  describe '#process_bytes' do
+    before(:example) do
+      @target = 'Hello, world!'
+      @data = 'hi'
+    end
+
+    context 'when EOF is found' do
+      it 'should return a decoded base64 string' do
+        encoded = Unveiler.encode(@target, @data)
+        bytes = encoded.unpack('B*')[0].scan(/.{8}/)
+        decoded = Unveiler.process_bytes(bytes)
+        expect(Base64.decode64(decoded)).to eq 'hi'
+      end
+    end
+
+    context 'when no EOF can be decoded' do
+      it 'should raise a RuntimeError' do
+        bad_bytes = ['00000000']
+        expect{Unveiler.process_bytes(bad_bytes)}.to raise_error(RuntimeError)
       end
     end
   end

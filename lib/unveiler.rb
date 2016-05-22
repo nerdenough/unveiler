@@ -47,6 +47,8 @@ class Unveiler
   #
   # +target+::  Target data to be decoded
   def self.decode(target)
+    raise ArgumentError, 'target must be a String' unless target.is_a? String
+
     # Convert the target data into an array of bytes
     bytes = target.unpack('B*')[0].scan(/.{8}/)
 
